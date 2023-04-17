@@ -1,9 +1,11 @@
 from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from loguru import logger
 from sqlalchemy.orm import Session
 
 from src import models
+from src.constants import PREPOPULATED_ITEMS
 from src.database import get_db
 from src.schemas.item import ItemIn, ItemOut
 from src.store.datastore import DataStore
@@ -11,6 +13,14 @@ from src.store.datastore import DataStore
 SortOrder = Literal["asc", "desc"]
 
 router = APIRouter(tags=["Items"], prefix="/items")
+
+
+@router.on_event("startup")
+def prepopulate_db(prepopulated_items: list[dict] = PREPOPULATED_ITEMS):
+    logger.info("prepopulating database with mock data")
+    db = next(get_db())
+    items = [models.Item(**data) for data in prepopulated_items]
+    DataStore(db).create_many(items)
 
 
 @router.post("/", status_code=status.HTTP_201_CREATED)

@@ -6,6 +6,7 @@ class ItemIn(BaseModel):
 
     name: str
     quantity: int
+    price: int
     description: str
 
 
@@ -15,6 +16,7 @@ class ItemOut(BaseModel):
     id: int
     name: str
     quantity: int
+    price: int
     description: str
 
     class Config:
