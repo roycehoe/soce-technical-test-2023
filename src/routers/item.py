@@ -23,28 +23,27 @@ USER_TO_UPDATE = {"name": "hello", "number": 1337, "is_happy": True}
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create(request: ItemIn, db: Session = Depends(get_db)):
-    DataStore(db).create(models.User(**request.dict()))
+    DataStore(db).create(models.Item(**request.dict()))
     return "success"
 
 
 @router.post("/many", status_code=status.HTTP_201_CREATED)
 def create_many(request: list[ItemIn], db: Session = Depends(get_db)):
-    DataStore(db).create_many([models.User(**data.dict()) for data in request])
+    DataStore(db).create_many([models.Item(**data.dict()) for data in request])
     return "success"
 
 
-@router.get("/", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
+@router.get("/{item_id}", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
 def get(
-    name: Optional[str] = None,
-    number: Optional[int] = None,
+    item_id: int,
     db: Session = Depends(get_db),
 ):
-    return DataStore(db).get(models.User, filter={"name": name, "number": number})
+    return DataStore(db).get(models.Item, filter={"id": item_id})
 
 
 @router.get("/all", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
 def get_all(db: Session = Depends(get_db)):
-    return DataStore(db).get_all(models.User)
+    return DataStore(db).get_all(models.Item)
 
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
@@ -57,16 +56,16 @@ def search(
     sort: Optional[SortOrder] = None,
     db: Session = Depends(get_db),
 ):
-    return DataStore(db).search(models.User, field, q, limit, offset, sort_col, sort)
+    return DataStore(db).search(models.Item, field, q, limit, offset, sort_col, sort)
 
 
 @router.put("/", status_code=status.HTTP_201_CREATED)
 def update(filter: dict = {"id": 12}, db: Session = Depends(get_db)):
-    return DataStore(db).update(filter, models.User, USER_TO_UPDATE)
+    return DataStore(db).update(filter, models.Item, USER_TO_UPDATE)
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete(id: str, name: str, number: str, db: Session = Depends(get_db)):
     return DataStore(db).delete(
-        models.User, filter={"id": id, "name": name, "number": number}
+        models.Item, filter={"id": id, "name": name, "number": number}
     )
