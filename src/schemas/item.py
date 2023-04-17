@@ -5,15 +5,17 @@ class ItemIn(BaseModel):
     """The request body when new items are created"""
 
     name: str
-    number: int
-    is_happy: bool
+    quantity: int
+    description: str
 
 
 class ItemOut(BaseModel):
     """The response body when items database is queried"""
 
+    id: int
     name: str
-    is_happy: bool
+    quantity: int
+    description: str
 
     class Config:
         orm_mode = True
