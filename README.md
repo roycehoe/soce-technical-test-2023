@@ -1,132 +1,42 @@
-# Introduction
+# Task
+
+**SOCE Technical Test 2023**
+
+**Time limit:** 48 hours
+
+**Scenario:**
+
+Your uncle Jack has been running a minimart for a couple of years and wants to expand his business by setting up an online store. As someone with programming experience, you have volunteered to help him with this task.
+
+**Objectives:**
+
+To develop an MVP that will give your uncle a feel for what an online store would look and feel like, you are required to create an application with the following features:
+
+| Frontend Webpage                                                                                                                                       | Backend API Server                                                                                                                                   |
+| :----------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <p>- User view for users to browse items from the store. (Payment processing is not required)</p><p>- Admin view for admins to manage their items.</p> | <p>- CREATE an item in the store.</p><p>- READ all items in the store.</p><p>- UPDATE an item in the store.</p><p>- DELETE an item in the store.</p> |
+
+Your uncle is also concerned about security. Specifically, he previously worked for an IT company, and they typically fail their Penetration Testing audit due to poor input validation and poor logging practices. Your uncle does not know anything about “input validation” nor “logging” (he knows that is not something he can eat) and hopes you can address them in your web application. Be sure you can explain the implemented security measures to your uncle the next time you meet him.
+
+**Optional Objectives:**
+
+The following are possible improvements to further impress your uncle but are not necessary:
+
+1. Extra points for additional useful features.
+1. Extra points for good frontend design (frontend).
+1. Extra points for usage of database wrapper – ORM (backend).
+1. Usage of container technologies such as Docker or Kubernetes.
+1. Usage of cloud technologies such as AWS, GCP or Azure.
+   \*\*
+
+**Instructions:**
+
+1. Create a public repository on any online git repository (such as Github or Gitlab).
+1. Include a readme file within the repository which describes clearly:
+   1. Steps required to run your developed application.
+   1. All objectives that you have attempted.
+1. Upon completion, deploy the application. Email us the following for assessment:
+   1. URL to your deployed application.
+   1. URL to your public git repository.
 
 A repository of tools to build a fully functioning backend. Built by canibalizing the best parts of all previous projects.
-
-# Features
-
-A fully functioning backend with API endpoints which:
-
-- Performs CRUD methods on a given SQL database
-- Presents options to search, paginate, and sort database fields
-- User authentication and hashing modules
-
-And also:
-
-- A working docker and docker-compose file
-- Pre-commit hooks: Black formatter + isort + conventional commits
-
-# First steps
-
-1. Install [poetry](https://python-poetry.org/docs/1.3#installing-with-the-official-installer)
-2. Delete the `poetry.lock` and `pyproject.toml` files respectively
-3. Run `poetry init` to initialize a fresh virtual environment
-4. Install recommended packages
-
-# Recommended packages
-
-```
-#################################
-# Note: You can just copy and paste
-# this entire code block in your terminal
-# without repercussions
-#################################
-
-
-#################################
-# Compulsory
-#################################
-poetry add requests &&
-poetry add "uvicorn[standard]" &&
-poetry add fastapi &&
-
-#################################
-# Good to have settings
-#################################
-poetry add -D black &&
-poetry add -D loguru &&
-
-#################################
-# Precommit setup
-#################################
-poetry add -D pre-commit &&
-poetry shell &&
-pre-commit install
-pre-commit install --hook-type commit-msg
-
-
-#################################
-# Project dependent dependencies
-#################################
-poetry add sqlalchemy &&                # For SQL databases
-poetry add \
-"python-jose[cryptography]" &&          # For creating JWT tokens
-poetry add "passlib[bcrypt]"            # For hashing/unhashing passwords
-
-```
-
-# Recommended settings
-
-Create a .env file and initialise an IS_DEV constant. This IS_DEV boolean would be used switch between dev and production settings (secrets/swagger UI etc.)
-
-Ensure that the .env file is not committed to this repository or your docker files by adding it to your .gitignore and .dockerignore files respectively. 
-
-# File setup
-
-- You don't have to use all the modules (obviously). Feel free to delete modules you do not use
-- Constants defined at the top of a module should typically be moved to the constants.py folder (unless there is a compelling reason not to)
-
-# Commit messages
-
-{type}{optional scope}: {description}
-
-{optional footer prepend}: {footer}
-
-types
-
-- fix: Bug fixes
-- feat: New feature
-- refactor: Code changes that neither fixes bugs nor adds features
-- perf: Performance improvement
-- docs: Documentation change
-- ci: Changes to CI configs
-- build: Changes that affect the build system or external dependencies
-
-footer prepend
-
-- BREAKING CHANGE
-
-Features of a good description
-
-- Imperative mood
-- Concise
-- Direct
-- Addresses the following:
-  - Why did you make the change? What was the effect? What were the changes in reference to?
-
-{description} = {did thing} + {impacted thing} + {greater purpose}
-{description} = {achieved greater purpose} + {did thing}
-
-# Task list
-
-Canibalise all previous projects to obtain the following:
-
-- [x] Code snippets to query SQL DBs
-- [ ] Code snippets to query from noSQL DBs
-- [ ] Code snippets to query from noSQL DBs
-- [x] Yaml config file for pre-commit hooks
-- [x] Docker and docker-compose.yml templates
-- [x] FastAPI router setup
-- [x] Code snippets for Authentication
-- [ ] Telegram bot template
-- [ ] Deployment automation tools
-- [ ] Do one for the frontend too (separate repo)
-
-During this process, I should also canibalise the methods of abstraction. I should:
-
-- [ ] For code snippets, write inline comments on on WHY certain code snippets are written the way they are
-- [ ] For repo structures, write README.md files on WHY the a directory is needed for its component modules
-
-Finally, I should
-
-- [ ] Note down things that I should replace/destory when using this repo as a template for a project
-- [ ] Note down the contents of this repository for easy navigation, and easy canibalisation [meta-canibalisation lol]
