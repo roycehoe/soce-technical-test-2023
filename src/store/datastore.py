@@ -82,7 +82,7 @@ class DataStore(Database):
                 .all()
             )
 
-    def update(self, filter: dict, model: Any, new_row: Any) -> None:
+    def update(self, filter: dict, model: Any, new_row: dict) -> None:
         with self.session as session:
             session.query(model).filter_by(**filter).update(new_row)
             session.commit()

@@ -13,13 +13,6 @@ SortOrder = Literal["asc", "desc"]
 
 router = APIRouter(tags=["Item"], prefix="/item")
 
-USERS_TO_WRITE_TO_DB = [
-    {"name": "foo", "number": 1337, "is_happy": True},
-    {"name": "bar", "number": 42069, "is_happy": False},
-]
-USER_TO_WRITE_TO_DB = {"name": "foo", "number": 1337, "is_happy": True}
-USER_TO_UPDATE = {"name": "hello", "number": 1337, "is_happy": True}
-
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create(request: ItemIn, db: Session = Depends(get_db)):
@@ -44,9 +37,7 @@ def get(
 ):
     if item := DataStore(db).get(models.Item, filter={"id": item_id}):
         return item
-    return {
-        "message": "No items found"
-    }  # TODO: Create raising of errors for proper handling
+    return []
 
 
 @router.get("/all/", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
@@ -79,9 +70,11 @@ def search(
 
 @router.put("/{item_id}", status_code=status.HTTP_201_CREATED)
 def update(item_id: int, updated_item: ItemIn, db: Session = Depends(get_db)):
-    return DataStore(db).update({"id": item_id}, models.Item, updated_item)
+    return DataStore(db).update({"id": item_id}, models.Item, updated_item.dict())
+    # TODO: Create raising of errors for proper handling
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
 def delete(id: str, db: Session = Depends(get_db)):
-    return DataStore(db).delete(models.Item, filter={"id": id})
+    DataStore(db).delete(models.Item, filter={"id": id})
+    return {"message": "Item deleted"}
