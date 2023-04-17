@@ -6,17 +6,6 @@ from sqlalchemy.orm import Session
 from src.schemas.database import Database
 
 
-def _remove_none_from_dict(func):
-    def wrap(*args, **kwargs):
-        kwargs["filter"] = {
-            key: value for key, value in kwargs["filter"].items() if value is not None
-        }
-        result = func(*args, **kwargs)
-        return result
-
-    return wrap
-
-
 def _get_order_by(
     model: Any, sort_col: Optional[str], sort_order: Optional[str]
 ) -> Optional[Callable]:
@@ -46,19 +35,28 @@ class DataStore(Database):
             session.add_all(new_rows)
             session.commit()
 
-    def get(self, model: Any, id: int) -> Any:
-        return self.session.query(model).filter_by(id=id).first()
+    def get(self, model: Any, id: int) -> Optional[Any]:
+        if data := self.session.query(model).filter_by(id=id).first():
+            return data
+        raise Exception(f"No data of model {model} with id {id} found")
+        # TODO: Create proper error handling here
 
     def get_all(self, model: Any) -> list[Any]:
         with self.session as session:
-            return session.query(model).all()
+            if data := session.query(model).all():
+                return data
+            raise Exception(f"No data in model {model} found")
 
-    def get_unique(self, model: Any, row_name: str) -> list[Any]:
+    def get_unique(self, model: Any, column_name: str) -> list[Any]:
         with self.session as session:
-            return [
-                getattr(row_value, row_name)
-                for row_value in session.query(getattr(model, row_name)).distinct()
-            ]
+            if unique_data := [
+                getattr(row_value, column_name)
+                for row_value in session.query(getattr(model, column_name)).distinct()
+            ]:
+                return unique_data
+            raise Exception(
+                f"No unique data in {model} found with the following column:{column_name}"
+            )
 
     def search(
         self,
@@ -72,21 +70,33 @@ class DataStore(Database):
     ) -> list[Any]:
         with self.session as session:
             order_by = _get_order_by(model, sort_col, sort_order)
-            return (
+            if search_results := (
                 session.query(model)
                 .filter(getattr(model, column_name).like(f"{q}%"))
                 .order_by(order_by)
                 .limit(limit)
                 .offset(offset)
                 .all()
-            )
+            ):
+                return search_results
+            raise Exception(f"No results found during search")
 
-    def update(self, filter: dict, model: Any, new_row: dict) -> None:
+    def update(self, filter: dict, model: Any, new_row: dict) -> Optional[dict]:
         with self.session as session:
-            session.query(model).filter_by(**filter).update(new_row)
+            db_item = session.query(model).filter_by(**filter).first()
+            if not db_item:
+                raise Exception("Problem updating DB item")
+                # TODO: Create proper error handling here
+            db_item.update(new_row)
             session.commit()
+            return new_row
 
-    def delete(self, model: Any, *, filter: dict) -> None:
+    def delete(self, model: Any, *, filter: dict) -> Optional[dict]:
         with self.session as session:
-            session.query(model).filter_by(**filter).delete()
+            db_item = session.query(model).filter_by(**filter).first()
+            if not db_item:
+                raise Exception("Problem deleting DB item")
+                # TODO: Create proper error handling here
+            db_item.delete()
             session.commit()
+            return db_item
