@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from loguru import logger
 from sqlalchemy.orm import Session
 
 from src import models
@@ -34,7 +35,8 @@ def create(request: ItemIn, db: Session = Depends(get_db)):
 @router.put("/{item_id}", status_code=status.HTTP_201_CREATED)
 def update(item_id: int, updated_item: ItemIn, db: Session = Depends(get_db)):
     try:
-        return DataStore(db).update(item_id, models.Item, updated_item.dict())
+        DataStore(db).update(item_id, models.Item, updated_item.dict())
+        return
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -45,7 +47,9 @@ def update(item_id: int, updated_item: ItemIn, db: Session = Depends(get_db)):
 @router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete(item_id: int, db: Session = Depends(get_db)):
     try:
-        return DataStore(db).delete(models.Item, item_id)
+        DataStore(db).delete(models.Item, item_id)
+        return
+
     except Exception:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

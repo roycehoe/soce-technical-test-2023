@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
+from loguru import logger
 from sqlalchemy.orm import Session
 
 from src.schemas.database import Database
@@ -28,15 +29,18 @@ class DataStore(Database):
         with self.session as session:
             session.add(new_row)
             session.commit()
+            logger.info(f"Item created: {new_row.__dict__}")
             return new_row
 
     def create_many(self, new_rows: list[Any]) -> None:
         with self.session as session:
             session.add_all(new_rows)
             session.commit()
+            logger.info(f"Items created: {[new_row.__dict__ for new_row in new_rows]}")
 
     def get(self, model: Any, id: int) -> Optional[Any]:
         if data := self.session.query(model).filter_by(id=id).first():
+            logger.info(f"Item retrieved: {data.__dict__}")
             return data
 
         raise Exception(f"No data of model {model} with id {id} found")
@@ -45,6 +49,7 @@ class DataStore(Database):
     def get_all(self, model: Any) -> list[Any]:
         with self.session as session:
             if data := session.query(model).all():
+                logger.info(f"Retrieving all data from model: {model}")
                 return data
 
             raise Exception(f"No data in model {model} found")
@@ -86,9 +91,11 @@ class DataStore(Database):
 
     def update(self, item_id: int, model: Any, new_row: dict) -> Optional[dict]:
         with self.session as session:
-            if db_item := session.query(model).filter_by(id=item_id).first():
+            if db_item := session.query(model).filter_by(id=item_id):
+                logger.info(f"pre-updated db_item: {new_row}")
                 db_item.update(new_row)
                 session.commit()
+                logger.info(f"post-updated db_item: {new_row}")
                 return new_row
             raise Exception(f"Failed to update item: {new_row}")
             # TODO: Create proper error handling here
@@ -98,6 +105,7 @@ class DataStore(Database):
             if db_item := session.query(model).filter_by(id=item_id).first():
                 db_item.delete()
                 session.commit()
+                logger.info(f"Item of item_id {item_id} deleted")
                 return db_item
 
             raise Exception(f"Failed to delete item: {filter}")
