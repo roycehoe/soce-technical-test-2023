@@ -27,17 +27,27 @@ def create(request: ItemIn, db: Session = Depends(get_db)):
         return created_item
     raise HTTPException(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-        detail=f"Faied to create item: {request}",
+        detail=f"Failed to create item: {request}",
     )
 
 
 @router.put("/{item_id}", status_code=status.HTTP_201_CREATED)
 def update(item_id: int, updated_item: ItemIn, db: Session = Depends(get_db)):
-    return DataStore(db).update({"id": item_id}, models.Item, updated_item.dict())
-    # TODO: Create raising of errors for proper handling
+    try:
+        return DataStore(db).update(item_id, models.Item, updated_item.dict())
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Item of item_id {item_id} not found",
+        )
 
 
-@router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
-def delete(id: str, db: Session = Depends(get_db)):
-    DataStore(db).delete(models.Item, filter={"id": id})
-    return {"message": "Item deleted"}
+@router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete(item_id: int, db: Session = Depends(get_db)):
+    try:
+        return DataStore(db).delete(models.Item, item_id)
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Item of item_id {item_id} not found",
+        )

@@ -84,21 +84,21 @@ class DataStore(Database):
                 return search_results
             raise Exception(f"No results found during search")
 
-    def update(self, filter: dict, model: Any, new_row: dict) -> Optional[dict]:
+    def update(self, item_id: int, model: Any, new_row: dict) -> Optional[dict]:
         with self.session as session:
-            if db_item := session.query(model).filter_by(**filter).first():
+            if db_item := session.query(model).filter_by(id=item_id).first():
                 db_item.update(new_row)
                 session.commit()
                 return new_row
-            raise Exception("Problem updating DB item")
+            raise Exception(f"Failed to update item: {new_row}")
             # TODO: Create proper error handling here
 
-    def delete(self, model: Any, *, filter: dict) -> Optional[dict]:
+    def delete(self, model: Any, item_id: int) -> Optional[dict]:
         with self.session as session:
-            if db_item := session.query(model).filter_by(**filter).first():
+            if db_item := session.query(model).filter_by(id=item_id).first():
                 db_item.delete()
                 session.commit()
                 return db_item
 
-            raise Exception("Problem deleting DB item")
+            raise Exception(f"Failed to delete item: {filter}")
             # TODO: Create proper error handling here
