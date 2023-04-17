@@ -27,16 +27,5 @@ app.add_middleware(
 get_configured_logging()
 
 
-@app.get("/")
-def hello_world():
-    return "hello world again"
-
-
-@app.get("/is_dev")
-def is_dev():
-    logger.info("hello world")
-    return IS_DEV
-
-
 app.include_router(item.router)
 app.include_router(items.router)
