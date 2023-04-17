@@ -38,6 +38,7 @@ class DataStore(Database):
     def get(self, model: Any, id: int) -> Optional[Any]:
         if data := self.session.query(model).filter_by(id=id).first():
             return data
+
         raise Exception(f"No data of model {model} with id {id} found")
         # TODO: Create proper error handling here
 
@@ -45,6 +46,7 @@ class DataStore(Database):
         with self.session as session:
             if data := session.query(model).all():
                 return data
+
             raise Exception(f"No data in model {model} found")
 
     def get_unique(self, model: Any, column_name: str) -> list[Any]:
@@ -54,6 +56,7 @@ class DataStore(Database):
                 for row_value in session.query(getattr(model, column_name)).distinct()
             ]:
                 return unique_data
+
             raise Exception(
                 f"No unique data in {model} found with the following column:{column_name}"
             )
@@ -83,20 +86,19 @@ class DataStore(Database):
 
     def update(self, filter: dict, model: Any, new_row: dict) -> Optional[dict]:
         with self.session as session:
-            db_item = session.query(model).filter_by(**filter).first()
-            if not db_item:
-                raise Exception("Problem updating DB item")
-                # TODO: Create proper error handling here
-            db_item.update(new_row)
-            session.commit()
-            return new_row
+            if db_item := session.query(model).filter_by(**filter).first():
+                db_item.update(new_row)
+                session.commit()
+                return new_row
+            raise Exception("Problem updating DB item")
+            # TODO: Create proper error handling here
 
     def delete(self, model: Any, *, filter: dict) -> Optional[dict]:
         with self.session as session:
-            db_item = session.query(model).filter_by(**filter).first()
-            if not db_item:
-                raise Exception("Problem deleting DB item")
-                # TODO: Create proper error handling here
-            db_item.delete()
-            session.commit()
-            return db_item
+            if db_item := session.query(model).filter_by(**filter).first():
+                db_item.delete()
+                session.commit()
+                return db_item
+
+            raise Exception("Problem deleting DB item")
+            # TODO: Create proper error handling here
