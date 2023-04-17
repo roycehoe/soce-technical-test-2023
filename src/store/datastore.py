@@ -46,9 +46,8 @@ class DataStore(Database):
             session.add_all(new_rows)
             session.commit()
 
-    @_remove_none_from_dict
-    def get(self, model: Any, *, filter: dict) -> Any:
-        return self.session.query(model).filter_by(**filter).all()
+    def get(self, model: Any, id: int) -> Any:
+        return self.session.query(model).filter_by(id=id).first()
 
     def get_all(self, model: Any) -> list[Any]:
         with self.session as session:

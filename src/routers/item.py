@@ -1,10 +1,9 @@
-from typing import Any, Literal, Optional
+from typing import Literal, Optional
 
-from fastapi import APIRouter, Depends, Query, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from src import models
-from src.constants import IS_DEV
 from src.database import get_db
 from src.schemas.item import ItemIn, ItemOut
 from src.store.datastore import DataStore
@@ -16,10 +15,9 @@ router = APIRouter(tags=["Item"], prefix="/item")
 
 @router.post("/", status_code=status.HTTP_201_CREATED)
 def create(request: ItemIn, db: Session = Depends(get_db)):
-    DataStore(db).create(models.Item(**request.dict()))
-    return {
-        "message": "Item created"
-    }  # TODO: Create raising of errors for proper handling
+    if created_item := DataStore(db).create(models.Item(**request.dict())):
+        return created_item
+    raise HTTPException(status_code=422, detail=f"Faied to create item: {request}")
 
 
 @router.post("/many", status_code=status.HTTP_201_CREATED)
@@ -30,23 +28,23 @@ def create_many(request: list[ItemIn], db: Session = Depends(get_db)):
     }  # TODO: Create raising of errors for proper handling
 
 
-@router.get("/{item_id}", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
+@router.get("/{item_id}", status_code=status.HTTP_200_OK, response_model=ItemOut)
 def get(
     item_id: int,
     db: Session = Depends(get_db),
 ):
-    if item := DataStore(db).get(models.Item, filter={"id": item_id}):
+    if item := DataStore(db).get(models.Item, item_id):
         return item
-    return []
+    raise HTTPException(
+        status_code=404, detail=f"Item with item_id: {item_id} not found"
+    )
 
 
 @router.get("/all/", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
 def get_all(db: Session = Depends(get_db)):
     if all_items := DataStore(db).get_all(models.Item):
         return all_items
-    return {
-        "message": "No items found"
-    }  # TODO: Create raising of errors for proper handling
+    raise HTTPException(status_code=404, detail=f"No items in database found")
 
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
@@ -63,9 +61,9 @@ def search(
         models.Item, field, q, limit, offset, sort_col, sort
     ):
         return searched_items
-    return {
-        "message": "No items found"
-    }  # TODO: Create raising of errors for proper handling
+    raise HTTPException(
+        status_code=404, detail=f"No items for given search parameters found"
+    )
 
 
 @router.put("/{item_id}", status_code=status.HTTP_201_CREATED)
