@@ -6,7 +6,7 @@ from src import models
 from src.constants import IS_DEV
 from src.database import engine
 from src.logs import get_configured_logging
-from src.routers import user
+from src.routers import item
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -38,4 +38,4 @@ def is_dev():
     return IS_DEV
 
 
-app.include_router(user.router)
+app.include_router(item.router)
