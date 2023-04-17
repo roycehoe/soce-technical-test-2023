@@ -1,9 +1,6 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="w-24 bg-red-300">
-    <p>Hello world</p>
-  </div>
 </template>
 
 <style scoped>
