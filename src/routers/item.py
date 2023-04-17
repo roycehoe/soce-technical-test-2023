@@ -59,13 +59,12 @@ def search(
     return DataStore(db).search(models.Item, field, q, limit, offset, sort_col, sort)
 
 
-@router.put("/", status_code=status.HTTP_201_CREATED)
-def update(filter: dict = {"id": 12}, db: Session = Depends(get_db)):
-    return DataStore(db).update(filter, models.Item, USER_TO_UPDATE)
+@router.put("/{item_id}", status_code=status.HTTP_201_CREATED)
+def update(filter: dict, item_id: int, db: Session = Depends(get_db)):
+    if item := db.query(models.Item).filter(models.Item.id == item_id).first():
+        return DataStore(db).update(filter, models.Item, item)
 
 
 @router.delete("/", status_code=status.HTTP_204_NO_CONTENT)
-def delete(id: str, name: str, number: str, db: Session = Depends(get_db)):
-    return DataStore(db).delete(
-        models.Item, filter={"id": id, "name": name, "number": number}
-    )
+def delete(id: str, db: Session = Depends(get_db)):
+    return DataStore(db).delete(models.Item, filter={"id": id})
