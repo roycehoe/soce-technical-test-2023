@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import Body from "./components/Body.vue";
 import Header from "./components/Header.vue";
 
 const PREPOPULATED_ITEMS = [
@@ -38,25 +39,7 @@ const PREPOPULATED_ITEMS = [
 <template>
   <div class="w-screen h-screen flex flex-col">
     <Header></Header>
-    <div class="flex flex-wrap mx-24">
-      <div v-for="item in PREPOPULATED_ITEMS" class="w-96 m-6">
-        <div class="card bg-base-100 shadow-xl">
-          <div class="card-body">
-            <h2 class="card-title">{{ item.name }}</h2>
-            <p>{{ item.description }}</p>
-            <div class="card-actions justify-between mt-4">
-              <select class="select select-primary">
-                <option selected>0</option>
-                <option v-for="quantity in item.quantity">
-                  {{ quantity }}
-                </option>
-              </select>
-              <button class="btn btn-primary">Add to cart</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Body></Body>
   </div>
 </template>
 <style scoped></style>
