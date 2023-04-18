@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
+
 const PREPOPULATED_ITEMS = [
   {
     name: "Coke Zero",
@@ -54,13 +56,14 @@ const PREPOPULATED_ITEMS = [
               class="input input-ghost w-full max-w-xs p-0 text-center"
               :value="item.description"
             />
+            <div class="divider m-0"></div>
             <p class="card-title block">
               $
               <input
                 type="text"
                 placeholder="Price"
                 class="input input-bordered w-16 p-0 text-center"
-                :value="item.price.toFixed(2)"
+                :value="item.price.toFixed(DEFAULT_PRICE_DECIMAL_PLACES)"
               />
             </p>
             <div class="card-actions justify-between mt-4">
@@ -91,6 +94,7 @@ const PREPOPULATED_ITEMS = [
               placeholder="Description"
               class="input input-ghost w-full max-w-xs p-0"
             />
+            <div class="divider m-0"></div>
             <p class="card-title block">
               $
               <input
@@ -106,7 +110,7 @@ const PREPOPULATED_ITEMS = [
                 class="input input-bordered w-12 p-0 text-center"
               />
               <div class="admin-mod-selection">
-                <button class="btn btn-primary mx-2">Save</button>
+                <button class="btn btn-primary mx-2">Create</button>
               </div>
             </div>
           </div>

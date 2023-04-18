@@ -1,0 +1,1 @@
+export const DEFAULT_PRICE_DECIMAL_PLACES = 2;

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
+
 const PREPOPULATED_ITEMS = [
   {
     name: "Coke Zero",
@@ -41,7 +43,10 @@ const PREPOPULATED_ITEMS = [
           <div class="card-body">
             <p class="card-title text-center block">{{ item.name }}</p>
             <p>{{ item.description }}</p>
-            <p class="my-4 card-title block">${{ item.price }}</p>
+            <div class="divider m-0"></div>
+            <p class="my-2 card-title block">
+              ${{ item.price.toFixed(DEFAULT_PRICE_DECIMAL_PLACES) }}
+            </p>
             <div class="card-actions justify-between mt-2">
               <select class="select select-primary">
                 <option selected>0</option>
