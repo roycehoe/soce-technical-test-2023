@@ -34,12 +34,12 @@ Alternatively, you may containerize the entire application:
 
 ## Frontend
 
-- Implement a user view for users to view all items in the store
-- Implement an admin view for admins to seamlessly create, update, and delete any items of their choosing
-- Creat a mock navbar to allow Uncle Jack to easily toggle between the admin and user view
-- Standardize item card format and page layout between admin and user view, improving usability by giving admins a consistent view to quickly compare and edit item data when toggling between both views
-- Integrate creation of new items with deletion and editing of old items, for a more seamless user admin experience
-- Utilise HTML form `required` attribute to improve the admin user experience by preventing input errors
+- Implemented a user view for users to view all items in the store
+- Implemented an admin view for admins to seamlessly create, update, and delete any items of their choosing
+- Created a mock navbar to allow Uncle Jack to easily toggle between the admin and user view
+- Standardized item card format and page layout between admin and user view, improving usability by giving admins a consistent view to quickly compare and edit item data when toggling between both views
+- Integrated creation of new items with deletion and editing of old items, for a more seamless user admin experience
+- Utilised HTML form `required` attribute to improve the admin user experience by preventing input errors
 
 ## Backend
 
