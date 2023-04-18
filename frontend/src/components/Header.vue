@@ -1,4 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import {
+  BodyComponent,
+  currentBodyComponent,
+} from "../composables/useBodyComponent";
+</script>
 
 <template>
   <div class="bg-green-700 m-6">
@@ -25,8 +30,12 @@
             tabindex="0"
             class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
           >
-            <li><a>Admin</a></li>
-            <li><a>Shop</a></li>
+            <li>
+              <a @click="currentBodyComponent = BodyComponent.Admin">Admin</a>
+            </li>
+            <li>
+              <a @click="currentBodyComponent = BodyComponent.Shop">Shop</a>
+            </li>
           </ul>
         </div>
       </div>
