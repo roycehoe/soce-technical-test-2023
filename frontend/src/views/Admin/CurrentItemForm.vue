@@ -1,44 +1,51 @@
 <script setup lang="ts">
 // import { onBeforeMount } from "vue";
 
-import { ref } from "vue";
+import { ref, toRefs } from "vue";
 import { ShopItemIn, useItem } from "../../composables/useItem";
 import { useItems } from "../../composables/useItems";
 
 const { updateCurrentItems } = useItems();
 const { updateItem, deleteItem } = useItem();
 const { item } = defineProps<{ item: ShopItemIn }>();
+
+const itemForm = toRefs(item);
 const isLoading = ref(false);
 
 async function submitUpdateItemRequest() {
   isLoading.value = true;
-  await updateItem(item.id, {
-    name: item.name,
-    quantity: item.quantity,
-    price: item.price,
-    description: item.description,
+  await updateItem(itemForm.id.value, {
+    name: itemForm.name.value,
+    quantity: itemForm.quantity.value,
+    price: itemForm.price.value,
+    description: itemForm.description.value,
   });
   await updateCurrentItems();
   isLoading.value = false;
+}
+
+function test() {
+  console.log(item.description);
 }
 </script>
 
 <template>
   <form @submit.prevent="submitUpdateItemRequest">
+    <button @click="test">TEST</button>
     <div class="card bg-base-100 shadow-xl w-96 m-6">
       <div class="card-body">
         <input
           type="text"
           placeholder="Name"
           class="input input-ghost p-0 card-title text-center"
-          v-model="item.name"
+          v-model="itemForm.name.value"
           required
         />
         <input
           type="text"
           placeholder="Description"
           class="input input-ghost w-full max-w-xs p-0 text-center"
-          v-model="item.description"
+          v-model="itemForm.description.value"
           required
         />
         <div class="divider m-0"></div>
@@ -48,17 +55,17 @@ async function submitUpdateItemRequest() {
             type="number"
             step="0.01"
             placeholder="Price"
-            class="input input-bordered w-16 p-0 text-center"
-            v-model="item.price"
+            class="input input-bordered w-20 p-0 text-center"
+            v-model="itemForm.price.value"
             required
           />
         </p>
         <div class="card-actions justify-between mt-4">
           <input
-            type="text"
+            type="number"
             placeholder="Qty"
             class="input input-bordered w-12 p-0 text-center"
-            :value="item.quantity"
+            :value="itemForm.quantity.value"
             required
           />
           <div class="admin-mod-selection">
@@ -66,7 +73,7 @@ async function submitUpdateItemRequest() {
               :disabled="isLoading"
               @click="
                 async (event) => {
-                  await deleteItem(item.id);
+                  await deleteItem(itemForm.id.value);
                   await updateCurrentItems();
                 }
               "

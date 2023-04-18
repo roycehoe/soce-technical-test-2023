@@ -92,7 +92,7 @@ class DataStore(Database):
 
     def update(self, item_id: int, model: Any, new_row: dict) -> Optional[dict]:
         with self.session as session:
-            if db_item := session.query(model).filter_by(id=item_id):
+            if db_item := session.query(model).filter_by(id=item_id).first():
                 logger.info(f"pre-updated db_item: {new_row}")
                 db_item.update(new_row)
                 session.commit()

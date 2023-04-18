@@ -39,14 +39,14 @@ function resetNewItemForm(): void {
           <input
             type="text"
             placeholder="Name"
-            class="input input-ghost w-full max-w-xs p-0 card-title"
+            class="input input-ghost w-full max-w-xs p-0 card-title text-center"
             v-model="newItem.name"
             required
           />
           <input
             type="text"
             placeholder="Description"
-            class="input input-ghost w-full max-w-xs p-0"
+            class="input input-ghost w-full max-w-xs p-0 text-center"
             v-model="newItem.description"
             required
           />
@@ -57,7 +57,7 @@ function resetNewItemForm(): void {
               type="number"
               step="0.01"
               placeholder="Price"
-              class="input input-bordered w-16 p-0 text-center"
+              class="input input-bordered w-20 p-0 text-center"
               v-model="newItem.price"
               required
             />
@@ -71,7 +71,7 @@ function resetNewItemForm(): void {
               required
             />
             <div class="admin-mod-selection">
-              <button type="submit" class="btn btn-primary mx-2">Create</button>
+              <button type="submit" class="btn btn-success mx-2">Save</button>
             </div>
           </div>
         </div>
