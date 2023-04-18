@@ -1,11 +1,10 @@
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from loguru import logger
-
 import models
 from constants import IS_DEV
 from database import engine
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from logs import get_configured_logging
+from loguru import logger
 from routers import item, items
 
 models.Base.metadata.create_all(bind=engine)
@@ -14,6 +13,7 @@ app = FastAPI(docs_url="/docs" if IS_DEV else None)
 
 CORS_ALLOWED_ORIGINS = [  # location where your frontend is running
     "http://localhost:3000",
+    "http://localhost:5173",
 ]
 
 app.add_middleware(
