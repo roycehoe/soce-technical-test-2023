@@ -1,31 +1,20 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
-import { ShopItemIn, useItem } from "../../composables/useItem";
-import { useItems } from "../../composables/useItems";
+import { onBeforeMount } from "vue";
+import { useItem } from "../../composables/useItem";
+import { currentItems, useItems } from "../../composables/useItems";
 import { DEFAULT_PRICE_DECIMAL_PLACES } from "../../constants";
 import NewItem from "./NewItem.vue";
 
-const { getItems } = useItems();
+const { getItems, updateCurrentItems } = useItems();
 const { createItem, updateItem, deleteItem, isLoading } = useItem();
 
-const shopItems = ref([] as ShopItemIn[]);
-
-async function fetchShopItemData() {
-  const { ok: isSuccessful, val: response } = await getItems();
-  if (isSuccessful) {
-    shopItems.value = response as ShopItemIn[];
-    return;
-  }
-  console.log(response);
-}
-
-onBeforeMount(fetchShopItemData);
+onBeforeMount(updateCurrentItems);
 </script>
 
 <template>
   <div class="w-screen h-screen flex flex-col">
     <div class="flex flex-wrap mx-24 text-center current-store--group">
-      <div v-for="item in shopItems" class="w-96 m-6 curent-store--cards">
+      <div v-for="item in currentItems" class="w-96 m-6 curent-store--cards">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <input
@@ -63,7 +52,7 @@ onBeforeMount(fetchShopItemData);
                   @click="
                     async (event) => {
                       await deleteItem(item.id);
-                      await fetchShopItemData();
+                      await updateCurrentItems();
                     }
                   "
                   class="btn btn-primary mx-2"
