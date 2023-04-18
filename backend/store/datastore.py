@@ -2,9 +2,8 @@ from dataclasses import dataclass
 from typing import Any, Callable, Optional
 
 from loguru import logger
-from sqlalchemy.orm import Session
-
 from schemas.database import Database
+from sqlalchemy.orm import Session
 
 
 def _get_order_by(
@@ -103,10 +102,10 @@ class DataStore(Database):
     def delete(self, model: Any, item_id: int) -> Optional[dict]:
         with self.session as session:
             if db_item := session.query(model).filter_by(id=item_id).first():
-                db_item.delete()
+                session.delete(db_item)
                 session.commit()
                 logger.info(f"Item of item_id {item_id} deleted")
-                return db_item
+                return
 
             raise Exception(f"Failed to delete item: {filter}")
             # TODO: Create proper error handling here

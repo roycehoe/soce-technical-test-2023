@@ -57,7 +57,12 @@ onBeforeMount(fetchShopItemData);
                 :value="item.quantity"
               />
               <div class="admin-mod-selection">
-                <button class="btn btn-primary mx-2">Delete</button>
+                <button
+                  @click="deleteItem(item.id)"
+                  class="btn btn-primary mx-2"
+                >
+                  Delete
+                </button>
                 <button class="btn btn-primary mx-2">Save</button>
               </div>
             </div>
