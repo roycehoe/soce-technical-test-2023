@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
-import { ShopItemIn } from "../composables/useItem";
+import { ShopItemIn, useItem } from "../composables/useItem";
 import { useItems } from "../composables/useItems";
 import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
 
 const { getItems } = useItems();
+const { createItem, updateItem, deleteItem } = useItem();
 
 const shopItems = ref([] as ShopItemIn[]);
 
