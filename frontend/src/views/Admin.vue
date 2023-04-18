@@ -5,7 +5,7 @@ import { useItems } from "../composables/useItems";
 import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
 
 const { getItems } = useItems();
-const { createItem, updateItem, deleteItem } = useItem();
+const { createItem, updateItem, deleteItem, isLoading } = useItem();
 
 const shopItems = ref([] as ShopItemIn[]);
 
@@ -58,7 +58,13 @@ onBeforeMount(fetchShopItemData);
               />
               <div class="admin-mod-selection">
                 <button
-                  @click="deleteItem(item.id)"
+                  :disabled="isLoading"
+                  @click="
+                    async (event) => {
+                      await deleteItem(item.id);
+                      await fetchShopItemData();
+                    }
+                  "
                   class="btn btn-primary mx-2"
                 >
                   Delete

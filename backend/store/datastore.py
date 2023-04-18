@@ -47,11 +47,13 @@ class DataStore(Database):
 
     def get_all(self, model: Any) -> list[Any]:
         with self.session as session:
-            if data := session.query(model).all():
+            data = session.query(model).all()
+            if data:
                 logger.info(f"Retrieving all data from model: {model}")
                 return data
 
-            raise Exception(f"No data in model {model} found")
+            logger.warning(f"No data in model {model} found")
+            return data
 
     def get_unique(self, model: Any, column_name: str) -> list[Any]:
         with self.session as session:

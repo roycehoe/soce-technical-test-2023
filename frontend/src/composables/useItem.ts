@@ -1,4 +1,5 @@
 import { Err, Result } from "ts-results";
+import { ref } from "vue";
 import { client } from "../services";
 
 export interface ShopItemOut {
@@ -13,6 +14,8 @@ export interface ShopItemIn extends ShopItemOut {
 }
 
 export function useItem() {
+  const isLoading = ref(false);
+
   async function createItem(
     newItem: ShopItemOut
   ): Promise<Result<void, string>> {
@@ -37,13 +40,16 @@ export function useItem() {
   }
 
   async function deleteItem(itemId: number): Promise<Result<void, string>> {
+    isLoading.value = true;
     try {
       return await client.delete(`/item/${itemId}`);
     } catch (error) {
       console.log(error);
       return Err("error occured deleting item");
+    } finally {
+      isLoading.value = false;
     }
   }
 
-  return { createItem, updateItem, deleteItem };
+  return { createItem, updateItem, deleteItem, isLoading };
 }
