@@ -9,7 +9,6 @@ import Shop from "../views/Shop.vue";
 
 async function test() {
   const response = await client.get("/items/");
-  console.log("Clicked");
   console.log(response);
 }
 </script>

@@ -1,47 +1,29 @@
 <script setup lang="ts">
+import { onBeforeMount, ref } from "vue";
+import { ShopItemIn } from "../composables/useItem";
+import { useItems } from "../composables/useItems";
 import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
 
-const PREPOPULATED_ITEMS = [
-  {
-    name: "Coke Zero",
-    quantity: 100,
-    price: 1.8,
-    description: "A healthier alternative to regular coke",
-  },
-  {
-    name: "Coke Regular",
-    quantity: 20,
-    price: 1.6,
-    description: "An unhealthier alternative to coke zero",
-  },
-  {
-    name: "Twisties",
-    quantity: 38,
-    price: 1.0,
-    description: "A tasty corn-based snack!",
-  },
-  {
-    name: "Liquorice",
-    quantity: 22,
-    price: 1.2,
-    description: "Just why.....",
-  },
-  {
-    name: "Top 10",
-    quantity: 8,
-    price: 1.5,
-    description: "The poor man's Mangum ice cream. Tastes just as great!",
-  },
-];
+const { getItems } = useItems();
+
+const shopItems = ref([] as ShopItemIn[]);
+
+async function fetchShopItemData() {
+  const { ok: isSuccessful, val: response } = await getItems();
+  if (isSuccessful) {
+    shopItems.value = response as ShopItemIn[];
+    return;
+  }
+  console.log(response);
+}
+
+onBeforeMount(fetchShopItemData);
 </script>
 
 <template>
   <div class="w-screen h-screen flex flex-col">
     <div class="flex flex-wrap mx-24 text-center current-store--group">
-      <div
-        v-for="item in PREPOPULATED_ITEMS"
-        class="w-96 m-6 curent-store--cards"
-      >
+      <div v-for="item in shopItems" class="w-96 m-6 curent-store--cards">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
             <input

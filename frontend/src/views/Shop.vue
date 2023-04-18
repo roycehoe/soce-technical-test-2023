@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { DEFAULT_PRICE_DECIMAL_PLACES } from "../constants";
+import { client } from "../services";
 
 const PREPOPULATED_ITEMS = [
   {
@@ -33,6 +34,13 @@ const PREPOPULATED_ITEMS = [
     description: "The poor man's Mangum ice cream. Tastes just as great!",
   },
 ];
+
+
+async function test() {
+  const response = await client.get("/items/");
+}
+
+
 </script>
 
 <template>
