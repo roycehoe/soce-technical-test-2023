@@ -1,12 +1,14 @@
 <script setup lang="ts">
 // import { onBeforeMount } from "vue";
 
+import { ref } from "vue";
 import { ShopItemIn, useItem } from "../../composables/useItem";
 import { useItems } from "../../composables/useItems";
 
-const { getItems, updateCurrentItems } = useItems();
-const { createItem, updateItem, deleteItem, isLoading } = useItem();
+const { updateCurrentItems } = useItems();
+const { updateItem, deleteItem } = useItem();
 const { item } = defineProps<{ item: ShopItemIn }>();
+const isLoading = ref(false);
 </script>
 
 <template>
@@ -30,12 +32,14 @@ const { item } = defineProps<{ item: ShopItemIn }>();
           placeholder="Name"
           class="input input-ghost p-0 card-title text-center"
           v-model="item.name"
+          required
         />
         <input
           type="text"
           placeholder="Description"
           class="input input-ghost w-full max-w-xs p-0 text-center"
           v-model="item.description"
+          required
         />
         <div class="divider m-0"></div>
         <p class="card-title block">
@@ -46,6 +50,7 @@ const { item } = defineProps<{ item: ShopItemIn }>();
             placeholder="Price"
             class="input input-bordered w-16 p-0 text-center"
             v-model="item.price"
+            required
           />
         </p>
         <div class="card-actions justify-between mt-4">
@@ -54,6 +59,7 @@ const { item } = defineProps<{ item: ShopItemIn }>();
             placeholder="Qty"
             class="input input-bordered w-12 p-0 text-center"
             :value="item.quantity"
+            required
           />
           <div class="admin-mod-selection">
             <button
@@ -64,11 +70,11 @@ const { item } = defineProps<{ item: ShopItemIn }>();
                   await updateCurrentItems();
                 }
               "
-              class="btn btn-primary mx-2"
+              class="btn btn-error mx-2"
             >
               Delete
             </button>
-            <button type="submit" class="btn btn-primary mx-2">Save</button>
+            <button type="submit" class="btn btn-success mx-2">Save</button>
           </div>
         </div>
       </div>
