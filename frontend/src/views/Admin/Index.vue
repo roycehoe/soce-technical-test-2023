@@ -17,6 +17,7 @@ onBeforeMount(updateCurrentItems);
       <CurrentItemForm
         v-for="item in currentItems"
         :item="item"
+        :key="item.id"
       ></CurrentItemForm>
       <NewItem></NewItem>
     </div>

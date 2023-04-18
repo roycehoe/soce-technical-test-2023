@@ -1,9 +1,8 @@
 <script setup lang="ts">
-// import { onBeforeMount } from "vue";
 
 import { ref, toRefs } from "vue";
 import { ShopItemIn, useItem } from "../../composables/useItem";
-import { useItems } from "../../composables/useItems";
+import { currentItems, useItems } from "../../composables/useItems";
 
 const { updateCurrentItems } = useItems();
 const { updateItem, deleteItem } = useItem();
@@ -21,6 +20,14 @@ async function submitUpdateItemRequest() {
     description: itemForm.description.value,
   });
   await updateCurrentItems();
+  isLoading.value = false;
+}
+
+async function submitDeleteItemRequest() {
+  isLoading.value = true;
+  await deleteItem(itemForm.id.value);
+  await updateCurrentItems();
+  console.log(currentItems);
   isLoading.value = false;
 }
 </script>
@@ -65,13 +72,9 @@ async function submitUpdateItemRequest() {
           />
           <div class="admin-mod-selection">
             <button
+              type="button"
               :disabled="isLoading"
-              @click="
-                async (event) => {
-                  await deleteItem(itemForm.id.value);
-                  await updateCurrentItems();
-                }
-              "
+              @click="submitDeleteItemRequest"
               class="btn btn-error mx-2"
             >
               Delete
