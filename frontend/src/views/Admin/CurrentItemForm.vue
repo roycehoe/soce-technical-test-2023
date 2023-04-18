@@ -9,22 +9,22 @@ const { updateCurrentItems } = useItems();
 const { updateItem, deleteItem } = useItem();
 const { item } = defineProps<{ item: ShopItemIn }>();
 const isLoading = ref(false);
+
+async function submitUpdateItemRequest() {
+  isLoading.value = true;
+  await updateItem(item.id, {
+    name: item.name,
+    quantity: item.quantity,
+    price: item.price,
+    description: item.description,
+  });
+  await updateCurrentItems();
+  isLoading.value = false;
+}
 </script>
 
 <template>
-  <form
-    @submit.prevent="
-      async (event) => {
-        await updateItem(item.id, {
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price,
-          description: item.description,
-        });
-        await updateCurrentItems();
-      }
-    "
-  >
+  <form @submit.prevent="submitUpdateItemRequest">
     <div class="card bg-base-100 shadow-xl w-96 m-6">
       <div class="card-body">
         <input
@@ -74,7 +74,13 @@ const isLoading = ref(false);
             >
               Delete
             </button>
-            <button type="submit" class="btn btn-success mx-2">Save</button>
+            <button
+              type="submit"
+              :disabled="isLoading"
+              class="btn btn-success mx-2"
+            >
+              Save
+            </button>
           </div>
         </div>
       </div>

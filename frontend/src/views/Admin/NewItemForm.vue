@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { ShopItemOut, useItem } from "../../composables/useItem";
+import { useItems } from "../../composables/useItems";
 
 const { createItem } = useItem();
+const { updateCurrentItems } = useItems();
 
 const newItem = ref({
   name: "",
@@ -27,6 +29,7 @@ function resetNewItemForm(): void {
       async (event) => {
         await createItem(newItem);
         resetNewItemForm();
+        updateCurrentItems();
       }
     "
   >
