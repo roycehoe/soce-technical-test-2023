@@ -30,9 +30,7 @@ def create_many(request: list[ItemIn], db: Session = Depends(get_db)):
 
 @router.get("/", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
 def get_all(db: Session = Depends(get_db)):
-    if all_items := DataStore(db).get_all(models.Item):
-        return all_items
-    raise HTTPException(status_code=404, detail=f"No items in database found")
+    return DataStore(db).get_all(models.Item)
 
 
 @router.get("/search", status_code=status.HTTP_200_OK, response_model=list[ItemOut])
