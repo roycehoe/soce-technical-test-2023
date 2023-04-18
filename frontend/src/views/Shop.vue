@@ -35,13 +35,14 @@ const PREPOPULATED_ITEMS = [
 
 <template>
   <div class="w-screen h-screen flex flex-col">
-    <div class="flex flex-wrap mx-24">
+    <div class="flex flex-wrap mx-24 text-center">
       <div v-for="item in PREPOPULATED_ITEMS" class="w-96 m-6">
         <div class="card bg-base-100 shadow-xl">
           <div class="card-body">
-            <h2 class="card-title">{{ item.name }}</h2>
+            <p class="card-title text-center block">{{ item.name }}</p>
             <p>{{ item.description }}</p>
-            <div class="card-actions justify-between mt-4">
+            <p class="my-4 card-title block">${{ item.price }}</p>
+            <div class="card-actions justify-between mt-2">
               <select class="select select-primary">
                 <option selected>0</option>
                 <option v-for="quantity in item.quantity">
