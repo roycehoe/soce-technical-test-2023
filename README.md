@@ -1,40 +1,54 @@
-# Task
+# Introduction
 
-**SOCE Technical Test 2023**
+A technical test by GovTech
 
-**Time limit:** 48 hours
+# Getting started
 
-**Scenario:**
+## Backend
 
-Your uncle Jack has been running a minimart for a couple of years and wants to expand his business by setting up an online store. As someone with programming experience, you have volunteered to help him with this task.
+- Install [poetry](https://python-poetry.org/docs/1.3#installing-with-the-official-installer) on your machine
+- Go into the backend directory
+- Install all project dependencies with `poetry install`
+- Activate the project virtual environment by running the command `poetry shell`
+- Run the command `uvicorn main:app --reload` to start the backend server on your machine. The server should be running on localhost:8000
+- Optional: To view the Swagger UI of this application, create a .env file in the backend directory and add the following line: `IS_DEV="True"`. You may visit the Swagger UI page at localhost:8000/docs
 
-**Objectives:**
+## Frontend
 
-To develop an MVP that will give your uncle a feel for what an online store would look and feel like, you are required to create an application with the following features:
+- Install `pnpm` with `npm` on your machine
+- Go into the frontend directory
+- Install all project dependencies with `pnpm install`
+- Create a .env file in the frontend directory and add the following line: `VITE_BASE_URL=http://localhost:8000` to specify the location of the backend service
+- Run the command `pnpm run dev` to start a development server on your local machine
+- Visit `http://localhost:5173` to view the application
 
-| Frontend Webpage                                                                                                                                       | Backend API Server                                                                                                                                   |
-| :----------------------------------------------------------------------------------------------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <p>- User view for users to browse items from the store. (Payment processing is not required)</p><p>- Admin view for admins to manage their items.</p> | <p>- CREATE an item in the store.</p><p>- READ all items in the store.</p><p>- UPDATE an item in the store.</p><p>- DELETE an item in the store.</p> |
+## Containerization
 
-Your uncle is also concerned about security. Specifically, he previously worked for an IT company, and they typically fail their Penetration Testing audit due to poor input validation and poor logging practices. Your uncle does not know anything about “input validation” nor “logging” (he knows that is not something he can eat) and hopes you can address them in your web application. Be sure you can explain the implemented security measures to your uncle the next time you meet him.
+Alternatively, you may containerize the entire application:
 
-**Optional Objectives:**
+- Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/)
+- Go to the root of this directory and run the command `docker-compose build && docker-compose up` to build and starts all the project's containers
+- View the application on `localhost:80`
 
-The following are possible improvements to further impress your uncle but are not necessary:
+# Objectives attempted
 
-1. Extra points for additional useful features.
-1. Extra points for good frontend design (frontend).
-1. Extra points for usage of database wrapper – ORM (backend).
-1. Usage of container technologies such as Docker or Kubernetes.
-1. Usage of cloud technologies such as AWS, GCP or Azure.
-   \*\*
+## Frontend
 
-**Instructions:**
+- Implement a user view for users to view all items in the store
+- Implement an admin view for admins to seamlessly create, update, and delete any items of their choosing
+- Creat a mock navbar to allow Uncle Jack to easily toggle between the admin and user view
+- Standardize item card format and page layout between admin and user view, improving usability by giving admins a consistent view to quickly compare and edit item data when toggling between both views
+- Integrate creation of new items with deletion and editing of old items, for a more seamless user admin experience
+- Utilise HTML form `required` attribute to improve the admin user experience by preventing input errors
 
-1. Create a public repository on any online git repository (such as Github or Gitlab).
-1. Include a readme file within the repository which describes clearly:
-   1. Steps required to run your developed application.
-   1. All objectives that you have attempted.
-1. Upon completion, deploy the application. Email us the following for assessment:
-   1. URL to your deployed application.
-   1. URL to your public git repository.
+## Backend
+
+- Utilised SQLAlchemy ORM to improve security of application, preventing possible SQL injection attacks by parameterising database queries
+- Utilised Pydantic to validate request schemas, and automate the raising of request schema related errors
+- Utilised loguru to log all CRUD related operations
+
+## Deployment
+
+- Containerised both backend and frontend services with Docker; Utilised docker-compose to enable communication between said services over the same network
+- Configured a reverse proxy with Nginx to enable running of both frontend and backend services on the same machine, simplifying deployment, and reducing infrastructure complexity and cost
+- Used a cloud technology provider (DigitalOcean) to provision a server to deploy my application
