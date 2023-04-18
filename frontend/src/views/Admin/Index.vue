@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { onBeforeMount } from "vue";
-import { useItem } from "../../composables/useItem";
 import { currentItems, useItems } from "../../composables/useItems";
 import CurrentItemForm from "./CurrentItemForm.vue";
 import NewItem from "./NewItemForm.vue";
 
-const { getItems, updateCurrentItems } = useItems();
-const { createItem, updateItem, deleteItem, isLoading } = useItem();
+const { updateCurrentItems } = useItems();
 
 onBeforeMount(updateCurrentItems);
 </script>

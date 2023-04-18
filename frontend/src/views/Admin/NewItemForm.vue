@@ -21,18 +21,17 @@ function resetNewItemForm(): void {
     description: "",
   };
 }
+
+async function submitCreateItem(): Promise<void> {
+  await createItem(newItem.value);
+  resetNewItemForm();
+  updateCurrentItems();
+  return;
+}
 </script>
 
 <template>
-  <form
-    @submit.prevent="
-      async (event) => {
-        await createItem(newItem);
-        resetNewItemForm();
-        updateCurrentItems();
-      }
-    "
-  >
+  <form @submit.prevent="submitCreateItem">
     <div class="w-96 m-6 curent-store--new-item">
       <div class="card bg-base-100 shadow-xl current-store--card">
         <div class="card-body">
