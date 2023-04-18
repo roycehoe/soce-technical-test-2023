@@ -35,7 +35,7 @@ const PREPOPULATED_ITEMS = [
 
 <template>
   <div class="w-screen h-screen flex flex-col">
-    <div class="flex flex-wrap mx-24 current-store--group">
+    <div class="flex flex-wrap mx-24 text-center current-store--group">
       <div
         v-for="item in PREPOPULATED_ITEMS"
         class="w-96 m-6 curent-store--cards"
@@ -45,23 +45,24 @@ const PREPOPULATED_ITEMS = [
             <input
               type="text"
               placeholder="Name"
-              class="input input-ghost w-full max-w-xs p-0 card-title"
+              class="input input-ghost p-0 card-title text-center"
               :value="item.name"
             />
             <input
               type="text"
               placeholder="Description"
-              class="input input-ghost w-full max-w-xs p-0"
+              class="input input-ghost w-full max-w-xs p-0 text-center"
               :value="item.description"
             />
-            <div class="flex">
+            <p class="card-title block">
+              $
               <input
                 type="text"
-                placeholder="Qty"
-                class="input input-bordered w-12 p-0 text-center"
-                :value="item.price"
+                placeholder="Price"
+                class="input input-bordered w-16 p-0 text-center"
+                :value="item.price.toFixed(2)"
               />
-            </div>
+            </p>
             <div class="card-actions justify-between mt-4">
               <input
                 type="text"
@@ -90,6 +91,14 @@ const PREPOPULATED_ITEMS = [
               placeholder="Description"
               class="input input-ghost w-full max-w-xs p-0"
             />
+            <p class="card-title block">
+              $
+              <input
+                type="text"
+                placeholder="Price"
+                class="input input-bordered w-16 p-0 text-center"
+              />
+            </p>
             <div class="card-actions justify-between mt-4">
               <input
                 type="text"
