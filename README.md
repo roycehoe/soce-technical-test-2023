@@ -38,5 +38,3 @@ The following are possible improvements to further impress your uncle but are no
 1. Upon completion, deploy the application. Email us the following for assessment:
    1. URL to your deployed application.
    1. URL to your public git repository.
-
-A repository of tools to build a fully functioning backend. Built by canibalizing the best parts of all previous projects.

@@ -23,15 +23,10 @@ async function submitUpdateItemRequest() {
   await updateCurrentItems();
   isLoading.value = false;
 }
-
-function test() {
-  console.log(item.description);
-}
 </script>
 
 <template>
   <form @submit.prevent="submitUpdateItemRequest">
-    <button @click="test">TEST</button>
     <div class="card bg-base-100 shadow-xl w-96 m-6">
       <div class="card-body">
         <input
