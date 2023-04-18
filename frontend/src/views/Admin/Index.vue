@@ -16,8 +16,6 @@ onBeforeMount(updateCurrentItems);
     <div class="flex flex-wrap mx-24 text-center current-store--group">
       <CurrentItemForm
         v-for="item in currentItems"
-        class="w-96 m-6 curent-store--cards"
-        :key="item.id"
         :item="item"
       ></CurrentItemForm>
       <NewItem></NewItem>
